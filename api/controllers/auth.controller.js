@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { errorHandler } from "../utils/error.js";
 
 export const signup = async (req, res, next) => {
-    console.log(req.body);
     const { username, email, password } = req.body;
     try {
         const hash = bcryptjs.hashSync(password, 10);
@@ -55,7 +54,6 @@ export const google = async (req, res, next) => {
                 password: hash,
                 avatar: req.body.photo
             });
-            console.log(newUser);
             await newUser.save();
             const token = jwt.sign({id: newUser._id}, process.env.JWT_SECRET);
             const {password, updatedAt, ...rest} = newUser._doc;

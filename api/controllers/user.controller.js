@@ -8,7 +8,7 @@ export default (req, res) => {
 
 export const updateUser = async (req, res, next) => {
     if (req.user.id !== req.params.id) return next(errorHandler(403, "Forbidden to do this action"));
-    
+
     try {
         if (req.body.password){
             req.body.password = bcryptjs.hashSync(req.body.password, 10);
@@ -28,4 +28,16 @@ export const updateUser = async (req, res, next) => {
         next(error);
     }
 
+};
+
+
+export const deleteUser = async (req, res, next) => {
+    if (req.user.id !== req.params.id) return next(errorHandler(403, "Forbidden to do this action"));
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.clearCookie('access_token');
+        res.status(200).json({message: "User deleted successfully"});
+    } catch (error) {
+        next(error);
+    }
 };
